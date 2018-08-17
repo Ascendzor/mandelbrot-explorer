@@ -5,6 +5,10 @@ body {
 }
 
 .Mandelbrot {
-  height: 6000px;
+  height: 450px;
   width: 100%;
+}
+
+.mandelTile {
+  opacity: 1;
 }
