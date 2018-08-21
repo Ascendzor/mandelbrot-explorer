@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "hsv-rgb": "^1.0.0",
+    "hsv2rgb": "^1.1.0",
     "leaflet": "^1.3.3",
     "lodash": "^4.17.10",
     "react": "^16.4.2",

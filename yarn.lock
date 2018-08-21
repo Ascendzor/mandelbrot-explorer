@@ -3153,6 +3153,14 @@ hpack.js@^2.1.6:
     readable-stream "^2.0.1"
     wbuf "^1.1.0"
 
+hsv-rgb@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hsv-rgb/-/hsv-rgb-1.0.0.tgz#8e13727c27ca9d5b7dd6fe383abd09ca920ba09a"
+
+hsv2rgb@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/hsv2rgb/-/hsv2rgb-1.1.0.tgz#60b0e559a8877d8d2dcce7391bc3b83b007ac9a6"
+
 html-comment-regex@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/html-comment-regex/-/html-comment-regex-1.1.1.tgz#668b93776eaae55ebde8f3ad464b307a4963625e"
