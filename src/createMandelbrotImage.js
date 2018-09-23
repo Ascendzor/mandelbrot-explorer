@@ -1,7 +1,7 @@
 import hsvToRgb from 'hsv2rgb'
 import createColourScale from './createColourScale'
 
-const maxIterations = 500
+const maxIterations = 100
 const tileSize = 256
 const normalize = (val, max, min) => (val-min) / (max-min)
 const theMandelbrot = (z, c) => {
@@ -16,25 +16,24 @@ const colourScale = createColourScale()
 
 export default (imgData, coords) => {
   let exes = []
-  const offsetX = -coords.y*256
-  const offsetY = coords.x*256
+
   const max = (coords.z+1)*4*tileSize
 
-  const colourScale = createColourScale()
+  // const colourScale = createColourScale()
 
   let counter = 0
-  // for(let y=offsetY; y<(tileSize+offsetY); y++) for(let x=offsetX; x<(tileSize+offsetX); x++) {
   for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
+    const offsetX = x+(coords.x*tileSize)-tileSize/2
+    const offsetY = y+(-coords.y*tileSize)-tileSize/2
 
-  // for(let y=(tileSize+offsetY); y<offsetY; y++) for(let x=offsetX; x<(tileSize+offsetX); x++) {
-  // for(let x=0; x<tileSize; x++) for(let y=0; y<tileSize; y++) {
-  // for(let x=offsetX; x<(tileSize+offsetX); x++) for(let y=(tileSize+offsetY); y>offsetY; y--) {
-    // console.log(x, y)
-    // if(!exes[x]) exes[x] = []
-    const normalizedX = normalize(x+(coords.x*tileSize), max, 0)
-    const normalizedY = normalize(y+(-coords.y*tileSize), max, 0)
-    const real = (normalizedX*3.5) - 2.5      //These magic numbers are for the mandelbrot scale
-    const imaginary = (normalizedY*2) - 1     //These magic numbers are for the mandelbrot scale
+    const normalizedX = normalize(offsetX, max, 0)
+    const normalizedY = normalize(offsetY, max, 0)
+
+    // const real = (normalizedX*3.5) - 2.5      //These magic numbers are for the mandelbrot scale
+    // const imaginary = (normalizedY*2) - 1     //These magic numbers are for the mandelbrot scale
+
+    const real = normalizedX      //These magic numbers are for the mandelbrot scale 3.5/2
+    const imaginary = normalizedY
 
     let iteration = 0
     let z = {x: real, y: imaginary}
@@ -69,8 +68,5 @@ export default (imgData, coords) => {
       imgData.data[pixel+3] = colourScale[iteration].a
     }
   }
-  // exes.forEach((ys, x) => {
-  //   console.log(ys.join(' '))
-  // })
   return imgData
 }

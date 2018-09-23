@@ -5,16 +5,21 @@ import context from './context'
 
 L.MandelbrotLayer = L.GridLayer.extend({
   createTile: (coords, done) => {
+    console.log(coords)
     const tile = document.createElement('canvas')
     const tileSize = 256
     tile.width = tile.height = tileSize
     const context = tile.getContext('2d')
     const imgData = context.createImageData(tileSize, tileSize)
     const mandelImage = createMandelbrotImage(imgData, coords)
-    context.putImageData(mandelImage, 0, 0)
+
+    console.log(coords.center)
 
     setTimeout(() => {
       context.putImageData(mandelImage, 0, 0)
+      context.font = "30px Arial"
+      context.fillStyle = 'white'
+      context.fillText(coords.x + ', ' + coords.y, 10, 40)
       done(null, tile)
     }, 16)
 
