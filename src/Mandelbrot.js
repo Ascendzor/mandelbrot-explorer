@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { Map } from 'react-leaflet'
 import Leaflet from 'leaflet'
 import MandelLayer from './MandelLayer'
-import createMandelbrotImage from './createMandelbrotImage'
-import context from './context'
 
 const boundsSize = 4096
 const bounds = [
@@ -12,21 +10,46 @@ const bounds = [
 ]
 
 class Mandelbrot extends Component {
-  componentDidMount() {
+  constructor() {
+    super()
     // let imgData = context().createImageData(256, 256)
     // context().putImageData(createMandelbrotImage(imgData, 256, 256), 0, 0)
+    this.state = {
+      center: [0, 0],
+      zoom: 0
+    }
   }
   render() {
+    const {center, zoom} = this.state
+    console.log(center)
+    console.log(zoom)
     return <div className="Mandelbrot">
       <Map
         style={{height: '100%'}}
         crs={Leaflet.CRS.Simple}
         bounds={bounds}
-        center={[0, 0]}
+        center={center}
         onViewportChange={e => {
-          console.log(e)
+          // console.log(e)
         }}
+        zoom={zoom}
         minZoom={0}
+        tms={true}
+        onClick={e => console.log('on click')}
+        zoomstart={e => console.log('zoomstart')}
+        onMovestart={e => console.log(e.target)}
+        onMoveend={e => console.log(e)}
+        doubleClickZoom={false}
+        onDblclick={e => {
+          const {zoom} = this.state
+          console.log(e)
+          this.setState({
+            center: [e.latlng.lat, e.latlng.lng],
+            zoom: zoom+1
+          })
+          // var latlng = map.mouseEventToLatLng(ev.originalEvent);
+          // console.log(latlng.lat + ', ' + latlng.lng);
+        }}
       >
         <MandelLayer
           maxZoom={25}
