@@ -38,9 +38,8 @@ export default (imgData, coords) => {
       z = theMandelbrot(z, c)
       iteration++
     }
-    // const pixel = (((y-offsetY)*tileSize)+(x-offsetX))*4
+    
     const pixel  = (((tileSize-1-y) * tileSize) + x) * 4
-    // console.log(pixel)
     if(iteration === maxIterations*coords.z) {
       imgData.data[pixel+0] = 0
       imgData.data[pixel+1] = 0

@@ -15,14 +15,11 @@ class Mandelbrot extends Component {
     // let imgData = context().createImageData(256, 256)
     // context().putImageData(createMandelbrotImage(imgData, 256, 256), 0, 0)
     this.state = {
-      center: [0, 0],
-      zoom: 0
+      center: [0, 0]
     }
   }
   render() {
     const {center, zoom} = this.state
-    console.log(center)
-    console.log(zoom)
     return <div className="Mandelbrot">
       <Map
         style={{height: '100%'}}
@@ -39,20 +36,10 @@ class Mandelbrot extends Component {
         zoomstart={e => console.log('zoomstart')}
         onMovestart={e => console.log(e.target)}
         onMoveend={e => console.log(e)}
-        doubleClickZoom={false}
-        onDblclick={e => {
-          const {zoom} = this.state
-          console.log(e)
-          this.setState({
-            center: [e.latlng.lat, e.latlng.lng],
-            zoom: zoom+1
-          })
-          // var latlng = map.mouseEventToLatLng(ev.originalEvent);
-          // console.log(latlng.lat + ', ' + latlng.lng);
-        }}
+
       >
         <MandelLayer
-          maxZoom={25}
+          maxZoom={50}
           tileSize={256}
         />
       </Map>

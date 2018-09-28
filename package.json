@@ -13,6 +13,7 @@
     "react-leaflet": "^2.0.1",
     "react-scripts": "1.1.4"
   },
+  "homepage": "https://ascendzor.github.io/mandelbrot-explorer/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
