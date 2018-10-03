@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Paper from '@material-ui/core/Paper'
-import Button from '@material-ui/core/Button'
 import Slider from '@material-ui/lab/Slider'
 
 class Mandelbrot extends Component {
@@ -13,7 +12,7 @@ class Mandelbrot extends Component {
   render() {
     const {quality} = this.state
 
-    
+
 
     return <Paper
       style={{

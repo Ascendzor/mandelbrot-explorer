@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import { Map } from 'react-leaflet'
 import Leaflet from 'leaflet'
 import MandelLayer from './MandelLayer'
-import Paper from '@material-ui/core/Paper'
-import Input from '@material-ui/core/Input'
-import Button from '@material-ui/core/Button'
 import Settings from './Settings'
 import {tileSize} from './constants'
 
@@ -45,7 +42,7 @@ class Mandelbrot extends Component {
         left: 13,
         top: 100
       }}>
-        <Settings />
+        {/*<Settings />*/}
       </div>
       <Map
         style={{height: '100%'}}
