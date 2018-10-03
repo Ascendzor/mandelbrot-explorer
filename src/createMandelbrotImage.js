@@ -1,8 +1,8 @@
 import createColourScale from './createColourScale'
-import {cloneDeep} from 'lodash'
+import {cloneDeep, times} from 'lodash'
+import {tileSize} from './constants'
 
 const maxIterations = 50
-const tileSize = 256
 const theMandelbrot = (z, c) => {
   return {
     x: z.x*z.x - z.y*z.y + c.x,
@@ -11,7 +11,7 @@ const theMandelbrot = (z, c) => {
 }
 const colourScale = createColourScale()
 
-export default (imgData, coords) => {
+export default (imgData, coords, qualityScale) => {
   coords = cloneDeep(coords)
   coords.y = coords.y-1
   coords.z = coords.z+1
@@ -23,6 +23,15 @@ export default (imgData, coords) => {
   const yBounds = {min: yMin, max: -yMin}
 
   for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
+    // const samples = [times(4, i => (i/4)+0.25)]
+    // if(x === 100 && y === 100) {
+    //   console.log(samples)
+    // }
+    //
+    // samples.forEach(sampleIndex => {
+    //
+    // })
+
     const preNormalizedPixel = coords.x + (x / tileSize)
     const rangePercentile = ((preNormalizedPixel-xBounds.min) * 100) / (xBounds.max - xBounds.min)
 
@@ -38,9 +47,9 @@ export default (imgData, coords) => {
       z = theMandelbrot(z, c)
       iteration++
     }
-    
+
     const pixel  = (((tileSize-1-y) * tileSize) + x) * 4
-    if(iteration === maxIterations*coords.z) {
+    if(iteration === maxIterations*coords.z*qualityScale) {
       imgData.data[pixel+0] = 0
       imgData.data[pixel+1] = 0
       imgData.data[pixel+2] = 0

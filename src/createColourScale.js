@@ -1,6 +1,6 @@
 import {times} from 'lodash'
 
-const range = 2048
+const range = 4096
 
 
 const colourScale = times(range, i => {
