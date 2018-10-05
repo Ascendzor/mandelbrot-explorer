@@ -1,6 +1,6 @@
 import createColourScale from './createColourScale'
 import {cloneDeep, times, flatten} from 'lodash'
-import {tileSize, maxIterations, antiAliasingSampleSize} from './constants'
+import {tileSize, maxIterations} from './constants'
 
 const theMandelbrot = (z, c) => {
   return {
@@ -22,52 +22,26 @@ export default (imgData, coords, qualityScale) => {
   const yBounds = {min: yMin, max: -yMin}
 
   for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
-    let samplePoints = times(antiAliasingSampleSize, aliasX => times(antiAliasingSampleSize, aliasY => {
-      return {
-        x: x+(aliasX/antiAliasingSampleSize),
-        y: y+(aliasY/antiAliasingSampleSize)
-      }
-    }))
-    samplePoints = flatten(samplePoints)
+    const preNormalizedPixel = coords.x + (x/tileSize)
+    const rangePercentile = ((preNormalizedPixel-xBounds.min) * 100) / (xBounds.max - xBounds.min)
 
-    let samples = []
-    let iterations = []
-    samplePoints.forEach(samplePoint => {
-      const preNormalizedPixel = coords.x + (samplePoint.x / tileSize)
-      const rangePercentile = ((preNormalizedPixel-xBounds.min) * 100) / (xBounds.max - xBounds.min)
+    const ypreNormalizedPixel = coords.y + (y/tileSize)
+    const yrangePercentile = ((ypreNormalizedPixel-yBounds.min) * 100) / (yBounds.max - yBounds.min)
+    const real = (rangePercentile * (1 - -2) / 100) + -2
+    const imaginary = (yrangePercentile * (1 - -1) / 100) + -1
 
-      const ypreNormalizedPixel = coords.y + (samplePoint.y / tileSize)
-      const yrangePercentile = ((ypreNormalizedPixel-yBounds.min) * 100) / (yBounds.max - yBounds.min)
-      const real = (rangePercentile * (1 - -2) / 100) + -2
-      const imaginary = (yrangePercentile * (1 - -1) / 100) + -1
+    let iteration = 0
+    let z = {x: real, y: imaginary}
+    const c = {x: real, y: imaginary}
+    while((z.x**2+z.y**2)<2**2 && iteration<maxIterations*coords.z) {
+      z = theMandelbrot(z, c)
+      iteration++
+    }
 
-      let iteration = 0
-      let z = {x: real, y: imaginary}
-      const c = {x: real, y: imaginary}
-      while((z.x**2+z.y**2)<2**2 && iteration<maxIterations*coords.z) {
-        z = theMandelbrot(z, c)
-        iteration++
-      }
-
-      samples.push(cloneDeep(colourScale[iteration]))
-      iterations.push(iteration)
-    })
-    const averageIterations = iterations.reduce((sum, iteration) => sum+iteration) / iterations.length
-
-    let colour = samples.reduce((sum, sample) => {
-      sum.r += sample.r
-      sum.g += sample.g
-      sum.b += sample.b
-      return sum
-    })
-
-    colour.r = colour.r/iterations.length
-    colour.g = colour.g/iterations.length
-    colour.b = colour.b/iterations.length
-
+    let colour = colourScale[iteration]
 
     const pixel  = (((tileSize-1-y) * tileSize) + x) * 4
-    if(averageIterations === maxIterations*coords.z*qualityScale) {
+    if(iteration === maxIterations*coords.z*qualityScale) {
       imgData.data[pixel+0] = 0
       imgData.data[pixel+1] = 0
       imgData.data[pixel+2] = 0
