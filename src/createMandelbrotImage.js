@@ -61,9 +61,9 @@ export default (imgData, coords, qualityScale) => {
       return sum
     })
 
-    colour.r = colour.r/antiAliasingSampleSize
-    colour.g = colour.g/antiAliasingSampleSize
-    colour.b = colour.b/antiAliasingSampleSize
+    colour.r = colour.r/iterations.length
+    colour.g = colour.g/iterations.length
+    colour.b = colour.b/iterations.length
 
 
     const pixel  = (((tileSize-1-y) * tileSize) + x) * 4
