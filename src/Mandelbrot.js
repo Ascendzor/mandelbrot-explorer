@@ -18,8 +18,6 @@ const bounds = [
 class Mandelbrot extends Component {
   constructor() {
     super()
-    // let imgData = context().createImageData(256, 256)
-    // context().putImageData(createMandelbrotImage(imgData, 256, 256), 0, 0)
     this.state = {
       viewport: {
         center: [0, -tileSize],
@@ -27,7 +25,6 @@ class Mandelbrot extends Component {
       }
     }
 
-    localStorage.setItem('qualityScale', 1)
     setTimeout(() => this.setState({viewport: {
       center: [0, -tileSize/2],
       zoom: 0

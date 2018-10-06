@@ -1,6 +1,7 @@
 import createColourScale from './createColourScale'
 import {cloneDeep, times, flatten} from 'lodash'
 import {tileSize, maxIterations} from './constants'
+import {getIterationsForTile} from './TileManager'
 
 const theMandelbrot = (z, c) => {
   return {
@@ -10,7 +11,29 @@ const theMandelbrot = (z, c) => {
 }
 const colourScale = createColourScale()
 
-export default (imgData, coords, qualityScale) => {
+const renderIterationsIntoPixels = ({imgData, iterations, coords}) => {
+  for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
+    const {z} = coords
+    const pixel  = (((tileSize-1-y) * tileSize) + x)
+    const colour = colourScale[iterations[pixel]]
+
+    if(iterations[pixel] === maxIterations*coords.z) {
+      imgData.data[pixel*4+0] = 0
+      imgData.data[pixel*4+1] = 0
+      imgData.data[pixel*4+2] = 0
+      imgData.data[pixel*4+3] = 255
+    } else {
+      imgData.data[pixel*4+0] = colour.r
+      imgData.data[pixel*4+1] = colour.g
+      imgData.data[pixel*4+2] = colour.b
+      imgData.data[pixel*4+3] = colour.a
+    }
+  }
+  return imgData
+}
+
+export default (context, coords, qualityScale) => {
+  const imgData = context.createImageData(tileSize, tileSize)
   coords = cloneDeep(coords)
   coords.y = coords.y-1
   coords.z = coords.z+1
@@ -21,37 +44,11 @@ export default (imgData, coords, qualityScale) => {
   const yMin = xMin/2
   const yBounds = {min: yMin, max: -yMin}
 
-  for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
-    const preNormalizedPixel = coords.x + (x/tileSize)
-    const rangePercentile = ((preNormalizedPixel-xBounds.min) * 100) / (xBounds.max - xBounds.min)
-
-    const ypreNormalizedPixel = coords.y + (y/tileSize)
-    const yrangePercentile = ((ypreNormalizedPixel-yBounds.min) * 100) / (yBounds.max - yBounds.min)
-    const real = (rangePercentile * (1 - -2) / 100) + -2
-    const imaginary = (yrangePercentile * (1 - -1) / 100) + -1
-
-    let iteration = 0
-    let z = {x: real, y: imaginary}
-    const c = {x: real, y: imaginary}
-    while((z.x**2+z.y**2)<2**2 && iteration<maxIterations*coords.z) {
-      z = theMandelbrot(z, c)
-      iteration++
-    }
-
-    let colour = colourScale[iteration]
-
-    const pixel  = (((tileSize-1-y) * tileSize) + x) * 4
-    if(iteration === maxIterations*coords.z*qualityScale) {
-      imgData.data[pixel+0] = 0
-      imgData.data[pixel+1] = 0
-      imgData.data[pixel+2] = 0
-      imgData.data[pixel+3] = 255
-    } else {
-      imgData.data[pixel+0] = colour.r
-      imgData.data[pixel+1] = colour.g
-      imgData.data[pixel+2] = colour.b
-      imgData.data[pixel+3] = colour.a
-    }
-  }
-  return imgData
+  return getIterationsForTile({coords, xBounds, yBounds, tileSize, maxIterations}).then(iterations => {
+    return renderIterationsIntoPixels({
+      iterations,
+      coords,
+      imgData
+    })
+  })
 }
