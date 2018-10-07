@@ -25,13 +25,18 @@ class Mandelbrot extends Component {
       }
     }
 
+    // setTimeout(() => this.setState({viewport: {
+    //   center: [0, -tileSize/2],
+    //   zoom: 0
+    // }}), 1)
     setTimeout(() => this.setState({viewport: {
-      center: [0, -tileSize/2],
-      zoom: 0
+      center: [266.6807107763253, -43.019447937294274],
+      zoom: 37
     }}), 1)
   }
   render() {
     const {viewport} = this.state
+
     return <div className="Mandelbrot">
       <div style={{
         position: 'absolute',
@@ -39,7 +44,9 @@ class Mandelbrot extends Component {
         left: 13,
         top: 100
       }}>
-        {/*<Settings />*/}
+        {<Settings
+          viewport={viewport}
+        />}
       </div>
       <Map
         style={{height: '100%'}}
@@ -47,7 +54,7 @@ class Mandelbrot extends Component {
         bounds={bounds}
         viewport={viewport}
         onViewportChange={e => {
-          // console.log(e)
+          this.setState({viewport: e})
         }}
         minZoom={0}
         tms={true}

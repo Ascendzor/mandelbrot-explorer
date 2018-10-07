@@ -11,8 +11,7 @@ class Mandelbrot extends Component {
   }
   render() {
     const {quality} = this.state
-
-
+    const {viewport} = this.props
 
     return <Paper
       style={{
@@ -22,6 +21,18 @@ class Mandelbrot extends Component {
       elevation={6}
     >
       <div>
+        <div>viewport</div>
+        <div>
+          <div>
+            X: {viewport.center[0]}
+          </div>
+          <div>
+            Y: {viewport.center[1]}
+          </div>
+          <div>
+            Zoom: {viewport.zoom}
+          </div>
+        </div>
         <div>settings</div>
         <div style={{paddingRight: 15}}>
           <Slider
