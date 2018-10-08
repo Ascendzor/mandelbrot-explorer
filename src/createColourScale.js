@@ -2,7 +2,6 @@ import {times} from 'lodash'
 
 const range = 4096
 
-
 const colourScale = times(range, i => {
   return {
     r: i % 256,
@@ -14,4 +13,20 @@ const colourScale = times(range, i => {
 
 export default () => {
   return colourScale
+}
+
+export const redColourScale = () => {
+  return times(range, i => {
+    return i % 256
+  })
+}
+export const greenColourScale = () => {
+  return times(range, i => {
+    return (i+85) % 256
+  })
+}
+export const blueColourScale = () => {
+  return times(range, i => {
+    return (i+(85*2)) % 256
+  })
 }

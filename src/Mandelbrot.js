@@ -25,14 +25,14 @@ class Mandelbrot extends Component {
       }
     }
 
-    // setTimeout(() => this.setState({viewport: {
-    //   center: [0, -tileSize/2],
-    //   zoom: 0
-    // }}), 1)
     setTimeout(() => this.setState({viewport: {
-      center: [266.6807107763253, -43.019447937294274],
-      zoom: 37
+      center: [0, -tileSize/2],
+      zoom: 0
     }}), 1)
+    // setTimeout(() => this.setState({viewport: {
+    //   center: [266.6807107763253, -43.019447937294274],
+    //   zoom: 37
+    // }}), 1)
   }
   render() {
     const {viewport} = this.state

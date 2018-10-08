@@ -32,8 +32,8 @@ const renderIterationsIntoPixels = ({imgData, iterations, coords}) => {
   return imgData
 }
 
-export default (context, coords, qualityScale) => {
-  const imgData = context.createImageData(tileSize, tileSize)
+export default (coords, qualityScale) => {
+  // const imgData = context.createImageData(tileSize, tileSize)
   coords = cloneDeep(coords)
   coords.y = coords.y-1
   coords.z = coords.z+1
@@ -44,11 +44,13 @@ export default (context, coords, qualityScale) => {
   const yMin = xMin/2
   const yBounds = {min: yMin, max: -yMin}
 
-  return getIterationsForTile({coords, xBounds, yBounds, tileSize, maxIterations}).then(iterations => {
-    return renderIterationsIntoPixels({
-      iterations,
-      coords,
-      imgData
-    })
-  })
+  console.log('before getIterations for eil')
+  return getIterationsForTile({coords, xBounds, yBounds, tileSize, maxIterations})
+  // return getIterationsForTile({coords, xBounds, yBounds, tileSize, maxIterations}).then(iterations => {
+  //   return renderIterationsIntoPixels({
+  //     iterations,
+  //     coords,
+  //     imgData
+  //   })
+  // })
 }
