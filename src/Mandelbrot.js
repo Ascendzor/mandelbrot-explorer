@@ -5,6 +5,7 @@ import MandelLayer from './MandelLayer'
 import Settings from './Settings'
 import {tileSize} from './constants'
 import Share from './Share'
+import Donate from './Donate'
 import toClipboard from 'copy-text-to-clipboard'
 import Button from '@material-ui/core/Button'
 import {FaClipboardList} from 'react-icons/fa'
@@ -23,28 +24,48 @@ const bounds = [
 class Mandelbrot extends Component {
   constructor() {
     super()
+
+    const hashContents = window.location.hash.split('#')[1]
+    let viewport = {
+      center: [0, -tileSize],
+      zoom: 0
+    }
+    if(hashContents) {
+      const datums = decodeURIComponent(hashContents).split('₿')
+      setTimeout(() => {
+        try {
+          this.setState({viewport: {
+            center: JSON.parse(datums[0]),
+            zoom: datums[1]
+          }})
+        } catch(error) {
+          console.log(error)
+        }
+      }, 1)
+    }
+    console.log(viewport)
+
     this.state = {
-      viewport: {
-        center: [0, -tileSize],
-        zoom: 0
-      },
+      viewport,
       showUrl: false,
       showSnackBar: false,
-      timeout: 0
+      timeout: 0,
+      showDonation: false
     }
 
     // setTimeout(() => this.setState({viewport: {
     //   center: [0, -tileSize/2],
     //   zoom: 0
     // }}), 1)
-    setTimeout(() => this.setState({viewport: {
-      center: [266.6807107763253, -43.019447937294274],
-      zoom: 37
-    }}), 1)
+    // setTimeout(() => this.setState({viewport: {
+    //   center: [266.6807107763253, -43.019447937294274],
+    //   zoom: 37
+    // }}), 1)
   }
   render() {
-    const {viewport, showUrl, showSnackBar, timeout} = this.state
+    const {viewport, showUrl, showSnackBar, timeout, showDonation} = this.state
 
+    console.log(viewport)
     const hash = {
       center: viewport.center,
       zoom: viewport.zoom
@@ -67,7 +88,15 @@ class Mandelbrot extends Component {
         bottom: 13,
         zIndex: 1000
       }}>
-        <Share onClick={() => this.setState({showUrl: !this.state.showUrl})}/>
+        <Share onClick={() => this.setState({showUrl: !this.state.showUrl, showDonation: false})}/>
+      </div>
+      <div style={{
+        position: 'absolute',
+        right: 125,
+        bottom: 13,
+        zIndex: 1000
+      }}>
+        <Donate onClick={() => this.setState({showDonation: !this.state.showDonation, showUrl: false})} />
       </div>
       {showUrl && <div className={'clipboardcopy'}
         onClick={() => {
@@ -92,7 +121,7 @@ class Mandelbrot extends Component {
           left: 0,
           top: 200,
           zIndex: 1000,
-          width: 240,
+          width: 200,
           borderRadius: 10,
           color: 'white',
           paddingTop: 10,
@@ -121,6 +150,26 @@ class Mandelbrot extends Component {
         width={100}
         message={<span id="message-id">URL copied to Clipboard!</span>}
       />
+      {showDonation && <div
+        className='clipboardcopy'
+        style={{
+          position: 'absolute',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          right: 0,
+          left: 0,
+          top: 200,
+          zIndex: 1000,
+          width: 240,
+          borderRadius: 10,
+          color: 'white',
+          paddingTop: 10,
+          height: 50
+        }}
+      >
+        <div>BTC</div>
+        <div style={{fontSize: 10}}>12psUNxtiCdE26y6DH7hje3bRHwUBeTyaz</div>
+      </div>}
       <Map
         style={{height: '100%'}}
         crs={Leaflet.CRS.Simple}
