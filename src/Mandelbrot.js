@@ -28,7 +28,7 @@ class Mandelbrot extends Component {
         center: [0, -tileSize],
         zoom: 0
       },
-      showUrl: true,
+      showUrl: false,
       showSnackBar: false,
       timeout: 0
     }
@@ -45,7 +45,11 @@ class Mandelbrot extends Component {
   render() {
     const {viewport, showUrl, showSnackBar, timeout} = this.state
 
-    console.log(this.state)
+    const hash = {
+      center: viewport.center,
+      zoom: viewport.zoom
+    }
+    window.location.hash = JSON.stringify(viewport.center)+'₿'+viewport.zoom
     return <div className="Mandelbrot">
       <div style={{
         position: 'absolute',
@@ -53,9 +57,9 @@ class Mandelbrot extends Component {
         left: 13,
         top: 100
       }}>
-        {<Settings
+        {/*<Settings
           viewport={viewport}
-        />}
+        />*/}
       </div>
       <div style={{
         position: 'absolute',
@@ -65,26 +69,10 @@ class Mandelbrot extends Component {
       }}>
         <Share onClick={() => this.setState({showUrl: !this.state.showUrl})}/>
       </div>
-      {showUrl && <div className={'clipboardcopy'} style={{
-        position: 'absolute',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        right: 0,
-        left: 0,
-        top: 200,
-        zIndex: 1000,
-        width: 240,
-        borderRadius: 10,
-        color: 'white',
-        paddingTop: 10,
-        height: 100
-      }}>
-        <div>
-          {window.location.href}
-        </div>
-        <div onClick={() => {
+      {showUrl && <div className={'clipboardcopy'}
+        onClick={() => {
           let {timeout} = this.state
-          const didCopy = toClipboard(window.location.href)
+          const didCopy = toClipboard(decodeURIComponent(window.location.href))
 
           clearTimeout(timeout)
           timeout = setTimeout(() => {
@@ -95,8 +83,27 @@ class Mandelbrot extends Component {
             timeout,
             showSnackBar: true
           })
-          console.log(didCopy)
-        }}>
+        }}
+        style={{
+          position: 'absolute',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          right: 0,
+          left: 0,
+          top: 200,
+          zIndex: 1000,
+          width: 240,
+          borderRadius: 10,
+          color: 'white',
+          paddingTop: 10,
+          height: 100,
+          fontSize: 8
+        }}
+      >
+        <div>
+          {decodeURIComponent(window.location.href)}
+        </div>
+        <div>
           <FaClipboardList style={{
             paddingTop: 7,
             width: 60,
