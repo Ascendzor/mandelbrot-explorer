@@ -13,3 +13,20 @@ body {
 .mandelTile {
   opacity: 1;
 }
+
+.Share {
+  background: rgba(60, 60, 60, .7);
+}
+
+.Share:hover {
+  cursor: pointer;
+  background: rgba(60, 60, 60, .9);
+}
+
+.clipboardcopy {
+  background: rgba(20, 20, 20, .90);
+}
+.clipboardcopy:hover {
+  cursor: pointer;
+  background: rgba(10, 10, 10, .95);
+}

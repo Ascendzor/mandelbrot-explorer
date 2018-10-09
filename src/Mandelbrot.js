@@ -4,6 +4,11 @@ import Leaflet from 'leaflet'
 import MandelLayer from './MandelLayer'
 import Settings from './Settings'
 import {tileSize} from './constants'
+import Share from './Share'
+import toClipboard from 'copy-text-to-clipboard'
+import Button from '@material-ui/core/Button'
+import {FaClipboardList} from 'react-icons/fa'
+import Snackbar from '@material-ui/core/Snackbar'
 
 const boundsSize = 4096
 const bounds = [
@@ -22,7 +27,10 @@ class Mandelbrot extends Component {
       viewport: {
         center: [0, -tileSize],
         zoom: 0
-      }
+      },
+      showUrl: true,
+      showSnackBar: false,
+      timeout: 0
     }
 
     // setTimeout(() => this.setState({viewport: {
@@ -35,8 +43,9 @@ class Mandelbrot extends Component {
     }}), 1)
   }
   render() {
-    const {viewport} = this.state
+    const {viewport, showUrl, showSnackBar, timeout} = this.state
 
+    console.log(this.state)
     return <div className="Mandelbrot">
       <div style={{
         position: 'absolute',
@@ -48,6 +57,63 @@ class Mandelbrot extends Component {
           viewport={viewport}
         />}
       </div>
+      <div style={{
+        position: 'absolute',
+        right: 13,
+        bottom: 13,
+        zIndex: 1000
+      }}>
+        <Share onClick={() => this.setState({showUrl: !this.state.showUrl})}/>
+      </div>
+      {showUrl && <div className={'clipboardcopy'} style={{
+        position: 'absolute',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        right: 0,
+        left: 0,
+        top: 200,
+        zIndex: 1000,
+        width: 240,
+        borderRadius: 10,
+        color: 'white',
+        paddingTop: 10,
+        height: 100
+      }}>
+        <div>
+          {window.location.href}
+        </div>
+        <div onClick={() => {
+          let {timeout} = this.state
+          const didCopy = toClipboard(window.location.href)
+
+          clearTimeout(timeout)
+          timeout = setTimeout(() => {
+            this.setState({showSnackBar: false})
+          }, 5000)
+
+          this.setState({
+            timeout,
+            showSnackBar: true
+          })
+          console.log(didCopy)
+        }}>
+          <FaClipboardList style={{
+            paddingTop: 7,
+            width: 60,
+            height: 60
+          }}/>
+        </div>
+      </div>}
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={showSnackBar}
+        onClose={() => this.setState({showSnackBar: false})}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        width={100}
+        message={<span id="message-id">URL copied to Clipboard!</span>}
+      />
       <Map
         style={{height: '100%'}}
         crs={Leaflet.CRS.Simple}
