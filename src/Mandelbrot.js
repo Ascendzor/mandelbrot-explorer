@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button'
 import {FaClipboardList} from 'react-icons/fa'
 import Snackbar from '@material-ui/core/Snackbar'
 
+const bitcoinAddress = '12psUNxtiCdE26y6DH7hje3bRHwUBeTyaz'
+
 const boundsSize = 4096
 const bounds = [
   [-boundsSize*3.5, -boundsSize*2],
@@ -47,10 +49,9 @@ class Mandelbrot extends Component {
 
     this.state = {
       viewport,
-      showUrl: false,
       showSnackBar: false,
-      timeout: 0,
-      showDonation: false
+      snackbarMessage: '',
+      timeout: 0
     }
 
     // setTimeout(() => this.setState({viewport: {
@@ -63,13 +64,13 @@ class Mandelbrot extends Component {
     // }}), 1)
   }
   render() {
-    const {viewport, showUrl, showSnackBar, timeout, showDonation} = this.state
+    const {viewport, showSnackBar, timeout, snackbarMessage} = this.state
 
-    console.log(viewport)
     const hash = {
       center: viewport.center,
       zoom: viewport.zoom
     }
+
     window.location.hash = JSON.stringify(viewport.center)+'₿'+viewport.zoom
     return <div className="Mandelbrot">
       <div style={{
@@ -88,21 +89,10 @@ class Mandelbrot extends Component {
         bottom: 13,
         zIndex: 1000
       }}>
-        <Share onClick={() => this.setState({showUrl: !this.state.showUrl, showDonation: false})}/>
-      </div>
-      <div style={{
-        position: 'absolute',
-        right: 125,
-        bottom: 13,
-        zIndex: 1000
-      }}>
-        <Donate onClick={() => this.setState({showDonation: !this.state.showDonation, showUrl: false})} />
-      </div>
-      {showUrl && <div className={'clipboardcopy'}
-        onClick={() => {
+        <Share onClick={() => {
           let {timeout} = this.state
-          const didCopy = toClipboard(decodeURIComponent(window.location.href))
 
+          toClipboard(decodeURIComponent(window.location.href))
           clearTimeout(timeout)
           timeout = setTimeout(() => {
             this.setState({showSnackBar: false})
@@ -110,36 +100,35 @@ class Mandelbrot extends Component {
 
           this.setState({
             timeout,
-            showSnackBar: true
+            showSnackBar: true,
+            snackbarMessage: 'Link copied to clipboard. Show people what you\'ve found!'
           })
-        }}
-        style={{
-          position: 'absolute',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          right: 0,
-          left: 0,
-          top: 200,
-          zIndex: 1000,
-          width: 200,
-          borderRadius: 10,
-          color: 'white',
-          paddingTop: 10,
-          height: 100,
-          fontSize: 8
-        }}
-      >
-        <div>
-          {decodeURIComponent(window.location.href)}
-        </div>
-        <div>
-          <FaClipboardList style={{
-            paddingTop: 7,
-            width: 60,
-            height: 60
-          }}/>
-        </div>
-      </div>}
+        }}/>
+      </div>
+      <div style={{
+        position: 'absolute',
+        right: 140,
+        bottom: 13,
+        zIndex: 1000
+      }}>
+        <Donate onClick={() => {
+          let {timeout} = this.state
+
+          this.setState({showDonation: !this.state.showDonation, showUrl: false})
+
+          toClipboard(bitcoinAddress)
+          clearTimeout(timeout)
+          timeout = setTimeout(() => {
+            this.setState({showSnackBar: false})
+          }, 5000)
+
+          this.setState({
+            timeout,
+            showSnackBar: true,
+            snackbarMessage: 'BTC address copied to clipboard. Thank you.'
+          })
+        }} />
+      </div>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={showSnackBar}
@@ -148,28 +137,8 @@ class Mandelbrot extends Component {
           'aria-describedby': 'message-id',
         }}
         width={100}
-        message={<span id="message-id">URL copied to Clipboard!</span>}
+        message={<span>{snackbarMessage}</span>}
       />
-      {showDonation && <div
-        className='clipboardcopy'
-        style={{
-          position: 'absolute',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          right: 0,
-          left: 0,
-          top: 200,
-          zIndex: 1000,
-          width: 240,
-          borderRadius: 10,
-          color: 'white',
-          paddingTop: 10,
-          height: 50
-        }}
-      >
-        <div>BTC</div>
-        <div style={{fontSize: 10}}>12psUNxtiCdE26y6DH7hje3bRHwUBeTyaz</div>
-      </div>}
       <Map
         style={{height: '100%'}}
         crs={Leaflet.CRS.Simple}
