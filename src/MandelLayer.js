@@ -14,9 +14,6 @@ L.MandelbrotLayer = L.GridLayer.extend({
     createMandelbrotImage(context, coords, localStorage.getItem('qualityScale')).then(mandelbrotImage => {
       setTimeout(() => {
         context.putImageData(mandelbrotImage, 0, 0)
-        context.font = "10px Arial"
-        context.fillStyle = 'white'
-        context.fillText(coords.x + ', ' + coords.y, 10, 40)
         done(null, tile)
       }, 16)
     })
