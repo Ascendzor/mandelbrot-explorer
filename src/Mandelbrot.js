@@ -10,6 +10,7 @@ import toClipboard from 'copy-text-to-clipboard/dist'
 import Button from '@material-ui/core/Button'
 import {FaClipboardList} from 'react-icons/fa'
 import Snackbar from '@material-ui/core/Snackbar'
+import {zoomChanged} from './TileManager'
 
 const bitcoinAddress = '12psUNxtiCdE26y6DH7hje3bRHwUBeTyaz'
 
@@ -146,6 +147,9 @@ class Mandelbrot extends Component {
         viewport={viewport}
         onViewportChange={e => {
           this.setState({viewport: e})
+        }}
+        onZoomStart={() => {
+          zoomChanged()
         }}
         minZoom={0}
         tms={true}
