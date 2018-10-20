@@ -5,7 +5,6 @@ import {isEqual} from 'lodash'
 import {spawn, Pool} from 'threads'
 
 const pool = new Pool()
-console.log(pool)
 let tiles = []
 
 const getTileKey = coords => {
@@ -15,23 +14,11 @@ export const getIterationsForTile = ({coords, xBounds, yBounds, tileSize, maxIte
   const tile = tiles[getTileKey(coords)]
   if(tile) return resolve(tile)
 
-  spawn(TileCreator).send({coords, xBounds, yBounds, tileSize, maxIterations}).on('message', response => {
-    console.log(response)
+  pool.run(TileCreator).send({coords, xBounds, yBounds, tileSize, maxIterations})
+  pool.on('done', (job, response) => {
     if(isEqual(response.coords, coords)) {
       tiles[getTileKey(response.coords)] = response.iterations
       resolve(response.iterations)
     }
   })
-  // window.tileCreator = new TileCreatorWorker()
-  // window.tileCreator.postMessage({coords, xBounds, yBounds, tileSize, maxIterations})
-  // window.tileCreator.addEventListener('message', event => {
-  //   const {coords, iterations} = event.data
-  //   PubSub.publish('tileLoaded', event.data)
-  // })
-  // PubSub.subscribe('tileLoaded', (msg, data) => {
-  //   if(isEqual(data.coords, coords)) {
-  //     tiles[getTileKey(data.coords)] = data.iterations
-  //     resolve(data.iterations)
-  //   }
-  // })
 })
