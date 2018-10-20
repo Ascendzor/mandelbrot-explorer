@@ -4,7 +4,7 @@ import PubSub from 'pubsub-js'
 import {isEqual} from 'lodash'
 import {spawn, Pool} from 'threads'
 
-const pool = new Pool()
+const pool = new Pool(Math.min(2, navigator.hardwareConcurrency - 2))
 let tiles = []
 let jobs = []
 
