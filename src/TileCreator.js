@@ -1,5 +1,3 @@
-
-
 export default ({coords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
   const theMandelbrot = (z, c) => {
     return {
@@ -7,7 +5,7 @@ export default ({coords, xBounds, yBounds, tileSize, maxIterations}) => new Prom
       y: 2 * z.x * z.y + c.y
     }
   }
-  
+
   let iterations = []
   for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
     const preNormalizedPixel = coords.x + (x/tileSize)

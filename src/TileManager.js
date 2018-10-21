@@ -1,4 +1,3 @@
-import TileCreatorWorker from './TileCreator.worker'
 import TileCreator from './TileCreator'
 import PubSub from 'pubsub-js'
 import {isEqual} from 'lodash'
