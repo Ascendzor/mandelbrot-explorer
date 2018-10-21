@@ -6,11 +6,11 @@ import Settings from './Settings'
 import {tileSize} from './constants'
 import Share from './Share'
 import Donate from './Donate'
+import Information from './Information'
 import toClipboard from 'copy-text-to-clipboard/dist'
 import Button from '@material-ui/core/Button'
 import {FaClipboardList} from 'react-icons/fa'
 import Snackbar from '@material-ui/core/Snackbar'
-import {zoomChanged} from './TileManager'
 
 const bitcoinAddress = '12psUNxtiCdE26y6DH7hje3bRHwUBeTyaz'
 
@@ -76,59 +76,51 @@ class Mandelbrot extends Component {
     return <div className="Mandelbrot">
       <div style={{
         position: 'absolute',
-        zIndex: 1000,
-        left: 13,
-        top: 100
-      }}>
-        {/*<Settings
-          viewport={viewport}
-        />*/}
-      </div>
-      <div style={{
-        position: 'absolute',
-        right: 13,
-        bottom: 13,
+        right: 17,
+        bottom: 17,
         zIndex: 1000
       }}>
-        <Share onClick={() => {
-          let {timeout} = this.state
+        <div style={{display: 'inline-block', verticalAlign: 'bottom', marginRight: 10}}>
+          <Donate onClick={() => {
+            let {timeout} = this.state
 
-          toClipboard(decodeURIComponent(window.location.href))
-          clearTimeout(timeout)
-          timeout = setTimeout(() => {
-            this.setState({showSnackBar: false})
-          }, 5000)
+            this.setState({showDonation: !this.state.showDonation, showUrl: false})
 
-          this.setState({
-            timeout,
-            showSnackBar: true,
-            snackbarMessage: 'Link copied to clipboard. Show people what you\'ve found!'
-          })
-        }}/>
-      </div>
-      <div style={{
-        position: 'absolute',
-        right: 140,
-        bottom: 13,
-        zIndex: 1000
-      }}>
-        <Donate onClick={() => {
-          let {timeout} = this.state
+            toClipboard(bitcoinAddress)
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+              this.setState({showSnackBar: false})
+            }, 5000)
 
-          this.setState({showDonation: !this.state.showDonation, showUrl: false})
+            this.setState({
+              timeout,
+              showSnackBar: true,
+              snackbarMessage: 'BTC address copied to clipboard. Thank you.'
+            })
+          }} />
+        </div>
+        <div style={{display: 'inline-block', verticalAlign: 'bottom', marginRight: 10}}>
+          <Information onClick={() => {
+            console.log('click')
+          }} />
+        </div>
+        <div style={{display: 'inline-block', verticalAlign: 'bottom'}}>
+          <Share onClick={() => {
+            let {timeout} = this.state
 
-          toClipboard(bitcoinAddress)
-          clearTimeout(timeout)
-          timeout = setTimeout(() => {
-            this.setState({showSnackBar: false})
-          }, 5000)
+            toClipboard(decodeURIComponent(window.location.href))
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+              this.setState({showSnackBar: false})
+            }, 5000)
 
-          this.setState({
-            timeout,
-            showSnackBar: true,
-            snackbarMessage: 'BTC address copied to clipboard. Thank you.'
-          })
-        }} />
+            this.setState({
+              timeout,
+              showSnackBar: true,
+              snackbarMessage: 'Link copied to clipboard. Show people what you\'ve found!'
+            })
+          }} />
+        </div>
       </div>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -149,7 +141,6 @@ class Mandelbrot extends Component {
           this.setState({viewport: e})
         }}
         onZoomStart={() => {
-          zoomChanged()
         }}
         minZoom={0}
         tms={true}

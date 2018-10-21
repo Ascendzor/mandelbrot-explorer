@@ -11,13 +11,16 @@ const getTileKey = coords => {
   return Object.values(coords).join(' ')
 }
 
-export const zoomChanged = () => {
-  while(jobs.length > 1) jobs.pop().abort()
-}
+let zoom = null
 
 export const getIterationsForTile = ({coords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
   const tile = tiles[getTileKey(coords)]
   if(tile) return resolve(tile)
+
+  if(coords.z !== zoom) {
+    while(jobs.length > 1) jobs.pop().abort()
+    zoom = coords.z
+  }
 
   jobs.push(pool.run(TileCreator).send({coords, xBounds, yBounds, tileSize, maxIterations}))
   pool.on('done', (job, response) => {

@@ -7,19 +7,20 @@ class Share extends Component {
     super()
   }
   render() {
-    return <div className={'Share'} onClick={e => this.props.onClick()} style={{
-      width: 100,
-      height: 100,
+    return <div className={'Share mapButton'} onClick={e => this.props.onClick()} style={{
+      width: 80,
+      height: 80,
       borderRadius: 10,
-      padding: 10,
+      padding: 5,
+      paddingTop: 10,
       fontSize: 12,
       color: 'white'
     }}>
-      Share this view
+      Share
       <FaCamera style={{
-        paddingTop: 16,
-        width: 60,
-        height: 60
+        paddingTop: 6,
+        width: 50,
+        height: 50
       }}/>
     </div>
   }

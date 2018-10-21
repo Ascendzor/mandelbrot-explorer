@@ -6,7 +6,7 @@ class Donate extends Component {
     super()
   }
   render() {
-    return <div className={'Share'} onClick={e => this.props.onClick()} style={{
+    return <div className={'Share mapButton'} onClick={e => this.props.onClick()} style={{
       width: 40,
       height: 40,
       borderRadius: 10,
