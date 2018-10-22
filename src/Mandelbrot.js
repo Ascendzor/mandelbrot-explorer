@@ -11,6 +11,7 @@ import toClipboard from 'copy-text-to-clipboard/dist'
 import Button from '@material-ui/core/Button'
 import {FaClipboardList} from 'react-icons/fa'
 import Snackbar from '@material-ui/core/Snackbar'
+import InformationBox from './InformationBox'
 
 const bitcoinAddress = '12psUNxtiCdE26y6DH7hje3bRHwUBeTyaz'
 
@@ -46,26 +47,17 @@ class Mandelbrot extends Component {
         }
       }, 1)
     }
-    console.log(viewport)
 
     this.state = {
       viewport,
       showSnackBar: false,
       snackbarMessage: '',
-      timeout: 0
+      timeout: 0,
+      ShouldShowInformationBox: true
     }
-
-    // setTimeout(() => this.setState({viewport: {
-    //   center: [0, -tileSize/2],
-    //   zoom: 0
-    // }}), 1)
-    // setTimeout(() => this.setState({viewport: {
-    //   center: [266.6807107763253, -43.019447937294274],
-    //   zoom: 37
-    // }}), 1)
   }
   render() {
-    const {viewport, showSnackBar, timeout, snackbarMessage} = this.state
+    const {viewport, showSnackBar, timeout, snackbarMessage, ShouldShowInformationBox} = this.state
 
     const hash = {
       center: viewport.center,
@@ -74,6 +66,9 @@ class Mandelbrot extends Component {
 
     window.location.hash = JSON.stringify(viewport.center)+'₿'+viewport.zoom
     return <div className="Mandelbrot">
+      {ShouldShowInformationBox && <div style={{position: 'absolute', left: 'calc(50% - 200px)', top: 50, zIndex: 1000}}>
+        <InformationBox />
+      </div>}
       <div style={{
         position: 'absolute',
         right: 17,

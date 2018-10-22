@@ -21,3 +21,7 @@ body {
   cursor: pointer;
   background: rgba(10, 10, 10, .95);
 }
+
+.link {
+  color: #8470ff !important;
+}
