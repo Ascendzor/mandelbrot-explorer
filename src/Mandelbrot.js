@@ -67,7 +67,7 @@ class Mandelbrot extends Component {
     window.location.hash = JSON.stringify(viewport.center)+'₿'+viewport.zoom
     return <div className="Mandelbrot">
       {ShouldShowInformationBox && <div style={{position: 'absolute', left: 'calc(50% - 200px)', top: 50, zIndex: 1000}}>
-        <InformationBox />
+        <InformationBox onClose={() => this.setState({ShouldShowInformationBox: false})}/>
       </div>}
       <div style={{
         position: 'absolute',
@@ -96,7 +96,10 @@ class Mandelbrot extends Component {
         </div>
         <div style={{display: 'inline-block', verticalAlign: 'bottom', marginRight: 10}}>
           <Information onClick={() => {
-            console.log('click')
+            const {ShouldShowInformationBox} = this.state
+            this.setState({
+              ShouldShowInformationBox: !ShouldShowInformationBox
+            })
           }} />
         </div>
         <div style={{display: 'inline-block', verticalAlign: 'bottom'}}>

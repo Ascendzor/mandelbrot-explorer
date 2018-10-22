@@ -9,6 +9,7 @@ class InformationBox extends Component {
     super()
   }
   render() {
+    const {onClose} = this.props
     return <div className={'InformationBox'} style={{
       width: 400,
       borderRadius: 10,
@@ -41,10 +42,10 @@ class InformationBox extends Component {
           <a className='link' target='_blank' href='https://www.youtube.com/watch?v=DKHucotq6J0&feature=youtu.be&t=69'>Humourous religious description</a>
         </p>
       </div>
-      <IconButton style={{position: 'absolute', top: 0, right: 0}}>
-        <FaTimesCircle style={{color: 'rgba(230, 50, 50, .9)'}}/>
+      <IconButton onClick={onClose} style={{position: 'absolute', top: 0, right: 0}}>
+        <FaTimesCircle style={{color: 'rgba(230, 230, 230, .5)'}}/>
       </IconButton>
-      <Button variant="contained" color="primary" size='small'>Close</Button>
+      <Button onClick={onClose} variant="contained" color="primary" size='small'>Close</Button>
     </div>
   }
 }
