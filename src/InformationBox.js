@@ -27,11 +27,16 @@ class InformationBox extends Component {
         <p>Pinch, zoom, scroll, drag all work.</p>
         <hr />
         <p>None of the imagery you see here was man-made.</p>
-        <p>The mathematical formula that generated this</p>
+        <p>The mathematical formula that generated this is:</p>
         <p>Z = Z ² + C</p>
         <hr />
         <p>
-          Explore Appreciate Share
+          How should you use this?
+        </p>
+        <p style={{fontWeight: 'bold', fontSize: 18}}>
+          <span style={{color: '#4A9FF4'}}>Explore </span>
+          <span style={{color: '#54AA00'}}>Appreciate </span>
+          <span style={{color: '#B20C54'}}>Share</span>
         </p>
         <hr />
         <p>Here are resources where you can learn more</p>
