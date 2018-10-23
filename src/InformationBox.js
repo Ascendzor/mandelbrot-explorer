@@ -50,7 +50,6 @@ class InformationBox extends Component {
       <IconButton onClick={onClose} style={{position: 'absolute', top: 0, right: 0}}>
         <FaTimesCircle style={{color: 'rgba(230, 230, 230, .5)'}}/>
       </IconButton>
-      <Button onClick={onClose} variant="contained" color="primary" size='small'>Close</Button>
     </div>
   }
 }
