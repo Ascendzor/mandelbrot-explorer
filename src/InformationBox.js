@@ -41,7 +41,7 @@ class InformationBox extends Component {
         <hr />
         <p>Here are resources where you can learn more</p>
         <p>
-          <a className='link' target='_blank' href='https://www.youtube.com/watch?v=DKHucotq6J0&feature=youtu.be&t=69'>How it is calculated mathematically</a>
+          <a className='link' target='_blank' href='https://www.youtube.com/watch?v=NGMRB4O922I'>How it is calculated mathematically</a>
         </p>
         <p>
           <a className='link' target='_blank' href='https://www.youtube.com/watch?v=DKHucotq6J0&feature=youtu.be&t=69'>Humourous religious description</a>
