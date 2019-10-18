@@ -142,10 +142,10 @@ class Mandelbrot extends Component {
         }}
         minZoom={0}
         tms={true}
-        onClick={e => console.log('on click')}
-        zoomstart={e => console.log('zoomstart')}
-        onMovestart={e => console.log(e.target)}
-        onMoveend={e => console.log(e)}
+        // onClick={e => console.log('on click')}
+        // zoomstart={e => console.log('zoomstart')}
+        // onMovestart={e => console.log(e.target)}
+        // onMoveend={e => console.log(e)}
 
       >
         <MandelLayer
