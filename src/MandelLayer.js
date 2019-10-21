@@ -11,6 +11,7 @@ L.MandelbrotLayer = L.GridLayer.extend({
     tile.width = tile.height = tileSize
     const context = tile.getContext('2d')
 
+    if(coords.x !== 0 || coords.y !== 0) return tile
     createMandelbrotImage(context, coords, localStorage.getItem('qualityScale')).then(mandelbrotImage => {
       setTimeout(() => {
         context.putImageData(mandelbrotImage, 0, 0)

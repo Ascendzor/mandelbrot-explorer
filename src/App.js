@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-
 import Mandelbrot from './Mandelbrot'
 
 class App extends Component {
+  componentDidMount() {
+    (async () => {
+      window.rusty = await import('./rust/pkg')
+      this.forceUpdate()
+    })()
+  }
   render() {
     return (
       <div className="App">
-        <Mandelbrot />
+        {window.rusty && <Mandelbrot />}
       </div>
     );
   }
