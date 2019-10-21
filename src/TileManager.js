@@ -25,17 +25,17 @@ export const getIterationsForTile = ({coords, xBounds, yBounds, tileSize, maxIte
   //   zoom = coords.z
   // }
 
-  jobs.push(pool.run(TileCreator).send({coords, xBounds, yBounds, tileSize, maxIterations}))
-  pool.on('done', (job, response) => {
-    if(isEqual(response.coords, coords)) {
-      tiles[getTileKey(response.coords)] = response.iterations
-      resolve(response.iterations)
-    }
-  })
-  // return TileCreator({coords, xBounds, yBounds, tileSize, maxIterations}).then(response => {
-  //   tiles[getTileKey(coords)] = response.iterations
-  //   return resolve(response.iterations)
+  // jobs.push(pool.run(TileCreator).send({coords, xBounds, yBounds, tileSize, maxIterations}))
+  // pool.on('done', (job, response) => {
+  //   if(isEqual(response.coords, coords)) {
+  //     tiles[getTileKey(response.coords)] = response.iterations
+  //     resolve(response.iterations)
+  //   }
   // })
+  return TileCreator({coords, xBounds, yBounds, tileSize, maxIterations}).then(response => {
+    tiles[getTileKey(coords)] = response.iterations
+    return resolve(response.iterations)
+  })
   
   
 })
