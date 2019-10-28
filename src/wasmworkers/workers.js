@@ -1,4 +1,5 @@
 const rusty = import("./rust/pkg/mandelbrot.js")
+const mandelbrotreference = require('./mandelbrotreference')
 
 let taskQueue = []
 onmessage = message => new Promise((resolve, reject) => {
@@ -7,7 +8,7 @@ onmessage = message => new Promise((resolve, reject) => {
 })
 
 const work = async () => {
-    const {coords, xBounds, yBounds, tileSize, maxIterations} = taskQueue.pop()
+    const {coords, xBounds, yBounds, tileSize, maxIterations, computeOption} = taskQueue.pop()
     rusty.then(rustyapi => {
         let iterations = []
         for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
@@ -19,7 +20,11 @@ const work = async () => {
             const real = (rangePercentile * (1 - -2) / 100) + -2
             const imaginary = (yrangePercentile * (1 - -1) / 100) + -1
 
-            const iteration = rustyapi.mandelbrot(maxIterations*coords.z, real, imaginary)
+            let iteration = 0
+            
+            if(computeOption === 'js') iteration = mandelbrotreference.default(maxIterations*coords.z, real, imaginary)
+            else iteration = rustyapi.mandelbrot(maxIterations*coords.z, real, imaginary)
+
             iterations.push(iteration)
         }
         postMessage({

@@ -1,6 +1,4 @@
 const PubSub = require('pubsub-js');
-let tiles = {}
-
 
 const getTileKey = coords => {
   return [coords.x, coords.y, coords.z].join(' ')
@@ -14,6 +12,7 @@ theWorkers.forEach(worker => {
   }
 })
 
+let tiles = {}
 let workerPointer = 0
 
 export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
@@ -28,6 +27,7 @@ export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, ma
     }
   })
 
+  console.log({coords: tileCoords, xBounds, yBounds, tileSize, maxIterations})
   theWorkers[workerPointer].postMessage({coords: tileCoords, xBounds, yBounds, tileSize, maxIterations})
   workerPointer = (workerPointer+1) % theWorkers.length
 })

@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 import Mandelbrot from './Mandelbrot'
+import Benchmark from './Benchmark'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Mandelbrot />
+export default () => {
+  if(window.location.pathname === '/benchmark') {
+    return <div className="App">
+      <div>
+        Do the benchmark here
       </div>
-    );
+      <Benchmark />
+    </div>
   }
-}
 
-export default App;
+  return <div className="App">
+    <Mandelbrot />
+  </div>
+};
