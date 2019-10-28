@@ -11,13 +11,13 @@ const theMandelbrot = (z, c) => {
 }
 const colourScale = createColourScale()
 
-const renderIterationsIntoPixels = ({imgData, iterations, coords}) => {
+const renderIterationsIntoPixels = ({imgData, iterations, tileCoords}) => {
   for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
-    const {z} = coords
+    const {z} = tileCoords
     const pixel  = (((tileSize-1-y) * tileSize) + x)
     const colour = colourScale[iterations[pixel]]
 
-    if(iterations[pixel] === maxIterations*coords.z) {
+    if(iterations[pixel] === maxIterations*tileCoords.z) {
       imgData.data[pixel*4+0] = 0
       imgData.data[pixel*4+1] = 0
       imgData.data[pixel*4+2] = 0
@@ -32,22 +32,23 @@ const renderIterationsIntoPixels = ({imgData, iterations, coords}) => {
   return imgData
 }
 
-export default (context, coords, qualityScale) => {
+export default (context, tileCoords, qualityScale) => {
   const imgData = context.createImageData(tileSize, tileSize)
-  coords = cloneDeep(coords)
-  coords.y = coords.y-1
-  coords.z = coords.z+1
+  tileCoords = {
+    ...tileCoords,
+    y: tileCoords.y-1,
+    z: tileCoords.z+1
+  }
 
-  const xMin = -((2)**coords.z)
+  const xMin = -((2)**tileCoords.z)
   const xBounds = {min: xMin, max: -xMin/2}
 
   const yMin = xMin/2
   const yBounds = {min: yMin, max: -yMin}
-
-  return getIterationsForTile({coords, xBounds, yBounds, tileSize, maxIterations}).then(iterations => {
+  return getIterationsForTile({tileCoords, xBounds, yBounds, tileSize, maxIterations}).then(iterations => {
     return renderIterationsIntoPixels({
       iterations,
-      coords,
+      tileCoords,
       imgData
     })
   })

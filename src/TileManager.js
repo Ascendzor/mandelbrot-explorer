@@ -1,41 +1,33 @@
-import TileCreator from './TileCreator'
-import PubSub from 'pubsub-js'
-import {isEqual} from 'lodash'
-import {Pool} from 'threads'
-import wasmWorker from 'wasm-worker'
-import {instantiateStreaming} from "assemblyscript/lib/loader"
+const PubSub = require('pubsub-js');
+let tiles = {}
 
-const pool = new Pool(Math.min(2, navigator.hardwareConcurrency - 2))
-
-let tiles = []
-let jobs = []
 
 const getTileKey = coords => {
-  return Object.values(coords).join(' ')
+  return [coords.x, coords.y, coords.z].join(' ')
 }
 
-let zoom = null
+const theWorkers = Array.from({length: 2}).map(a => new Worker('/workers.js'))
+theWorkers.forEach(worker => {
+  worker.onmessage = evt => {
+    console.log('worker on message')
+    PubSub.publish('onTileLoad', evt.data)
+  }
+})
 
-export const getIterationsForTile = ({coords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
-  const tile = tiles[getTileKey(coords)]
+let workerPointer = 0
+
+export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
+  const tileKey = getTileKey(tileCoords)
+  const tile = tiles[tileKey]
   if(tile) return resolve(tile)
-  
-  // if(coords.z !== zoom) {
-  //   while(jobs.length > 1) jobs.pop().abort()
-  //   zoom = coords.z
-  // }
-
-  // jobs.push(pool.run(TileCreator).send({coords, xBounds, yBounds, tileSize, maxIterations}))
-  // pool.on('done', (job, response) => {
-  //   if(isEqual(response.coords, coords)) {
-  //     tiles[getTileKey(response.coords)] = response.iterations
-  //     resolve(response.iterations)
-  //   }
-  // })
-  return TileCreator({coords, xBounds, yBounds, tileSize, maxIterations}).then(response => {
-    tiles[getTileKey(coords)] = response.iterations
-    return resolve(response.iterations)
+  PubSub.subscribe('onTileLoad', (eventName, loadedTile) => {
+    const loadedTileKey = getTileKey(loadedTile.coords)
+    if(tileKey == loadedTileKey) {
+      tiles[loadedTileKey] = loadedTile.iterations
+      return resolve(loadedTile.iterations)
+    }
   })
-  
-  
+
+  theWorkers[workerPointer].postMessage({coords: tileCoords, xBounds, yBounds, tileSize, maxIterations})
+  workerPointer = (workerPointer+1) % theWorkers.length
 })
