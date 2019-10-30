@@ -1,29 +1,54 @@
-import {tileSize} from '../constants'
+import {tileSize, maxIterations} from '../constants'
+import createColourScale from '../createColourScale'
+const colourScale = createColourScale()
 
-export default (coords, max_iter, xBounds, yBounds) => {
-    let iterations = []
+export default (xCoord, yCoord, zCoord) => {
+    const imageData = new ImageData(tileSize, tileSize)
+    yCoord = -yCoord
+    zCoord = zCoord+1
 
-    Array.from({length: tileSize}).forEach(y => Array.from({length: tileSize}).forEach(x => {
-        const preNormalizedPixel = coords.x + (x/tileSize)
-        const rangePercentile = ((preNormalizedPixel-xBounds.min) * 100) / (xBounds.max - xBounds.min)
+    const minXBounds = -((2)**zCoord)
+    const maxXBounds = -minXBounds/2
 
-        const ypreNormalizedPixel = coords.y + (y/tileSize)
-        const yrangePercentile = ((ypreNormalizedPixel-yBounds.min) * 100) / (yBounds.max - yBounds.min)
-        const real = (rangePercentile * (1 - -2) / 100) + -2
+    const minYBounds = minXBounds/2
+    const maxYBounds = -minYBounds
+
+    for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
+        const preNormalizedPixel = xCoord + (x/tileSize)
+        const rangePercentile = ((preNormalizedPixel-minXBounds) * 100) / (maxXBounds - minXBounds)
+
+        const ypreNormalizedPixel = yCoord + (y/tileSize)
+        const yrangePercentile = ((ypreNormalizedPixel-minYBounds) * 100) / (maxYBounds - minYBounds)
         const imaginary = (yrangePercentile * (1 - -1) / 100) + -1
+        const real = (rangePercentile * (1 - -2) / 100) + -2
 
-        let zrzi = (real, imaginary)
-        let iter = 0
-        
-        while (((zrzi[0]*zrzi[0]) + (zrzi[1]*zrzi[1]) <= 4.0) && (iter < max_iter)) {
-            zrzi = (
-                ((zrzi[0]*zrzi[0]) - (zrzi[1]*zrzi[1]) + real),
-                ((2.0 * zrzi[0] * zrzi[1]) + imaginary)
-            )
-            iter = iter + 1
+        let iteration = 0
+        let z = {x: real, y: imaginary}
+        const c = {x: real, y: imaginary}
+        while((z.x**2+z.y**2)<2**2 && iteration<maxIterations*zCoord) {
+            z = {
+                x: z.x*z.x - z.y*z.y + c.x,
+                y: 2 * z.x * z.y + c.y
+            }
+            iteration++
         }
-        iterations.push(iter)
-    }))
+        const pixel  = (((tileSize-1-y) * tileSize) + x)
+        
+        const colour = colourScale[iteration]
 
-    return iterations
+        if(iteration === maxIterations*zCoord) {
+            imageData.data[pixel*4+0] = 0
+            imageData.data[pixel*4+1] = 0
+            imageData.data[pixel*4+2] = 0
+            imageData.data[pixel*4+3] = 255
+            
+        } else {
+            imageData.data[pixel*4+0] = colour.r
+            imageData.data[pixel*4+1] = colour.g
+            imageData.data[pixel*4+2] = colour.b
+            imageData.data[pixel*4+3] = colour.a
+        }
+    }
+
+    return imageData
 }

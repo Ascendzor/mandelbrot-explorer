@@ -15,6 +15,19 @@ theWorkers.forEach(worker => {
 let tiles = {}
 let workerPointer = 0
 
+export const renderTile = ({coords, computeOption}) => new Promise((resolve, reject) => {
+  PubSub.subscribe('onTileLoad', (eventName, loadedTile) => {
+    const tileKey = getTileKey(coords)
+    const loadedTileKey = getTileKey(loadedTile.coords)
+    if(tileKey == loadedTileKey) {
+      return resolve(loadedTile.imageData)
+    }
+  })
+
+  theWorkers[workerPointer].postMessage({coords, computeOption})
+  workerPointer = (workerPointer+1) % theWorkers.length
+})
+
 export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
   const tileKey = getTileKey(tileCoords)
   const tile = tiles[tileKey]

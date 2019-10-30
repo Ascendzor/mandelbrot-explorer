@@ -8,19 +8,27 @@ onmessage = message => new Promise((resolve, reject) => {
 })
 
 const work = async () => {
-    const {coords, xBounds, yBounds, maxIterations, computeOption} = taskQueue.pop()
-    rusty.then(rustyapi => {
+    const {coords, computeOption} = taskQueue.pop()
 
-        let iterations = null
+    rusty.then(rustyapi => {
+        let imageData = null
         if(computeOption === 'js') {
-            iterations = mandelbrotreference.default(coords, maxIterations, xBounds, yBounds)
+            imageData = mandelbrotreference.default(coords.x, coords.y, coords.z)
+            // iterations = mandelbrotreference.default(
+            //     coords.x,
+            //     coords.y,
+            //     maxIterations,
+            //     xBounds.max,
+            //     xBounds.min,
+            //     yBounds.max,
+            //     yBounds.min
+            // )
         } else {
-            iterations = rustyapi.mandelbrot(coords, maxIterations, xBounds, yBounds)
+            // iterations = rustyapi.mandelbrot(coords, maxIterations, xBounds, yBounds)
         }
-        
         postMessage({
             coords,
-            iterations
+            imageData
         })
     })
 
