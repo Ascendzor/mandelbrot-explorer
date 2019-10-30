@@ -24,22 +24,35 @@ const testCase = {
 }
 export default () => {
     useEffect(() => {
-        console.time('rust')
-        new Promise((resolve, reject) => {
-            rustWorker.onmessage = evt => {
-                console.timeEnd('rust')
-                resolve()
-            }
-        }).then(() => new Promise((resolve, reject) => {
-            console.time('js')
-            jsWorker.onmessage = e => {
-                console.timeEnd('js')
-                resolve()
-            }
-            jsWorker.postMessage({...testCase, computeOption: 'js'})
-        }))
-        
-        rustWorker.postMessage(testCase)
+        setTimeout(() => {
+            (async () => {
+                await new Promise((resolve, reject) => {
+                    let counter = 0
+                    rustWorker.onmessage = evt => {
+                        console.timeEnd('rust')
+                        if(counter === 100) console.timeEnd('js')
+                        resolve()
+                    }
+                    console.time('rust')
+                    Array.from({length: 100}).forEach(i => {
+                        rustWorker.postMessage({...testCase, computeOption: 'js'})
+                    })
+                })
+
+                await new Promise((resolve, reject) => {
+                    let counter = 0
+                    console.time('js')
+                    jsWorker.onmessage = e => {
+                        counter++
+                        if(counter === 100) console.timeEnd('js')
+                        resolve()
+                    }
+                    Array.from({length: 100}).forEach(i => {
+                        jsWorker.postMessage({...testCase, computeOption: 'js'})
+                    })
+                })
+            })()
+        }, 1000)
     }, [])
 
     return <div>
