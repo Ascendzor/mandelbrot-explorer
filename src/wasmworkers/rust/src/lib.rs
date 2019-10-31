@@ -3,12 +3,10 @@ extern crate web_sys;
 
 use wasm_bindgen::prelude::*;
 // use wasm_bindgen::Clamped;
-// use web_sys::console;
 // use web_sys::{ImageData};
 
 #[wasm_bindgen(start)]
 pub fn run() {
-    // console::log_1(&"rust wasm run".into());
 }
 
 #[wasm_bindgen]
@@ -21,38 +19,66 @@ pub fn greet(name: &str) {
     alert(&format!("Hello, {}!", name));
 }
 
-#[wasm_bindgen]
-// pub fn mandelbrot(xCoord: u32, yCoord: u32, max_iter: u32, maxXBounds: u32, minXBounds: u32, maxYBounds: u32, minYBounds: u32)  -> [u32; 256*256] {
-// pub fn mandelbrot(xCoord: u32, mut yCoord: u32, mut zCoord: u32) -> Result<ImageData, JsValue> {
-pub fn mandelbrot(xCoord: i32, mut yCoord: i32, mut zCoord: i32) -> i32 {
-    
-    // 256 * 256 * 4 = 262144
-    let mut imageData: [u8; 262144] = [0; 262144];
+macro_rules! log {
+    ( $( $t:tt )* ) => {
+        web_sys::console::log_1(&format!( $( $t )* ).into());
+    }
+}
 
+#[wasm_bindgen]
+pub fn mandelbrot(xCoord: f64, mut yCoord: f64, mut zCoord: u32) -> Vec<u8> {
+    let mut data = Vec::new();
+    // let tileSize: u16 = 256;
+    let tileSize: u16 = 256;
 
     yCoord = -yCoord;
     zCoord = zCoord+1;
 
-    let minXBounds = -((2 as i32).pow(zCoord as u32));
-    minXBounds
-    // const maxXBounds = -minXBounds/2
+    let minXBounds: f64 = -((2 as i32).pow(zCoord)) as f64;
+    let maxXBounds: f64 = -minXBounds/2.0;
+    let minYBounds: f64 = minXBounds/2.0;
+    let maxYBounds: f64 = -minYBounds;
+    // log!("rust: {} {} {} {}", minXBounds, maxXBounds, minYBounds, maxYBounds);
 
-    // const minYBounds = minXBounds/2
-    // const maxYBounds = -minYBounds
+    for y in 0..tileSize {
+        for x in 0..tileSize {
+            let preNormalizedPixel: f64 = xCoord + ((x as f64)/(tileSize as f64));
+            let rangePercentile: f64 = ((preNormalizedPixel-minXBounds) * 100.0) / (maxXBounds - minXBounds);
+            
+            let ypreNormalizedPixel: f64 = yCoord + ((y as f64)/(tileSize as f64));
+            let yrangePercentile: f64 = ((ypreNormalizedPixel-minYBounds) * 100.0) / (maxYBounds - minYBounds);
+            
+            let imaginary: f64 = (yrangePercentile * (1.0 - -1.0) / 100.0) + -1.0;
+            let real: f64 = (rangePercentile * (1.0 - -2.0) / 100.0) + -2.0;
 
-    // let mut data = Vec::new();
-    // for x in 0..256 {
-    //     for y in 0..256 {
-    //         data.push(0 as u8);
-    //         data.push(0 as u8);
-    //         data.push(0 as u8);
-    //         data.push(255 as u8);
-    //     }
-    // }
+            let pixel: u16 = ((tileSize-1-y) * tileSize) + x;
 
-    // let data = ImageData::new_with_u8_clamped_array_and_sh(Clamped(&mut data), 256, 256)?;
+            let mut zrzi = (real as f64, imaginary as f64);
+            let mut iteration = 0;
 
-    // data
+            while ((zrzi.0*zrzi.0) + (zrzi.1*zrzi.1) <= 4.0) && (iteration < (50*zCoord)) {
+                
+                zrzi = (
+                    ((zrzi.0*zrzi.0) - (zrzi.1*zrzi.1) + real),
+                    ((2.0 * zrzi.0 * zrzi.1) + imaginary)
+                );
+                iteration = iteration + 1;
+                if x == 150 && y == 150 && (iteration == 2 || iteration == 159) {
+                    log!("rust: iteration: ...");
+                    log!("rust: iteration: zrzi: {} {}", zrzi.0, zrzi.1);
+                    log!("rust: iteration: crci: {} {}", real, imaginary);
+                    log!("rust: iteration: iteration zCoord: {} {}", iteration, zCoord);
+                }
+            }
+
+            data.push((iteration / 4) as u8);
+            data.push((iteration / 2) as u8);
+            data.push((iteration) as u8);
+            data.push((255) as u8);
+        }
+    }
+
+    data
 }
 
 #[test]

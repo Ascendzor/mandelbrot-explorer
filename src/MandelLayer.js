@@ -11,7 +11,9 @@ L.MandelbrotLayer = L.GridLayer.extend({
     const context = tile.getContext('2d')
 
     // if(coords.x !== 0 || coords.y !== 0) return tile
-    renderTile({coords, computeOption: 'js'}).then(imageData => {
+    renderTile({coords, computeOption: 'jss'}).then(imageData => {
+      // console.log({coords})
+      // console.log({imageData})
       context.putImageData(imageData, 0, 0)
       done(null, tile)
     })

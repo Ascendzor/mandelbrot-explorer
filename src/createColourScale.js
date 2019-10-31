@@ -1,9 +1,6 @@
-import {times} from 'lodash'
-
 const range = 4096
 
-
-const colourScale = times(range, i => {
+const colourScale = Array.from({length: range}).map((_, i) => {
   return {
     r: i % 256,
     g: (i+85) % 256,
