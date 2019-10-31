@@ -1,6 +1,5 @@
 import { MapLayer, withLeaflet } from 'react-leaflet'
 import L from 'leaflet'
-import createMandelbrotImage from './createMandelbrotImage'
 import {tileSize} from './constants'
 import {renderTile} from './TileManager'
 

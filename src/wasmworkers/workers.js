@@ -24,7 +24,7 @@ const work = async () => {
             //     yBounds.min
             // )
         } else {
-            // iterations = rustyapi.mandelbrot(coords, maxIterations, xBounds, yBounds)
+            imageData = rustyapi.mandelbrot(coords.x, coords.y, coords.z)
         }
         postMessage({
             coords,

@@ -2,14 +2,12 @@ import React, { Component } from 'react'
 import { Map } from 'react-leaflet'
 import Leaflet from 'leaflet'
 import MandelLayer from './MandelLayer'
-import Settings from './Settings'
+// import Settings from './Settings'
 import {tileSize} from './constants'
 import Share from './Share'
 import Donate from './Donate'
 import Information from './Information'
-import toClipboard from 'copy-text-to-clipboard/dist'
-import Button from '@material-ui/core/Button'
-import {FaClipboardList} from 'react-icons/fa'
+import toClipboard from 'copy-text-to-clipboard'
 import Snackbar from '@material-ui/core/Snackbar'
 import InformationBox from './InformationBox'
 
@@ -57,12 +55,7 @@ class Mandelbrot extends Component {
     }
   }
   render() {
-    const {viewport, showSnackBar, timeout, snackbarMessage, ShouldShowInformationBox} = this.state
-
-    const hash = {
-      center: viewport.center,
-      zoom: viewport.zoom
-    }
+    const {viewport, showSnackBar, snackbarMessage, ShouldShowInformationBox} = this.state
 
     window.location.hash = JSON.stringify(viewport.center)+'₿'+viewport.zoom
     return <div className="Mandelbrot">

@@ -8,6 +8,7 @@ export default (xCoord, yCoord, zCoord) => {
     zCoord = zCoord+1
 
     const minXBounds = -((2)**zCoord)
+    return minXBounds
     const maxXBounds = -minXBounds/2
 
     const minYBounds = minXBounds/2

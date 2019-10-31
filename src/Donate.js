@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import {FaBitcoin} from 'react-icons/fa'
 
 class Donate extends Component {
-  constructor() {
-    super()
-  }
   render() {
     return <div className={'Share mapButton'} onClick={e => this.props.onClick()} style={{
       width: 40,

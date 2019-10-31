@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 // import {PaperPlane} from 'react-icons/paper-plane'
-import {FaPaperPlane, FaCamera} from 'react-icons/fa'
+import {FaCamera} from 'react-icons/fa'
 
 class Share extends Component {
-  constructor() {
-    super()
-  }
   render() {
     return <div className={'Share mapButton'} onClick={e => this.props.onClick()} style={{
       width: 80,

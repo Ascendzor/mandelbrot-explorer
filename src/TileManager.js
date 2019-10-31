@@ -19,7 +19,7 @@ export const renderTile = ({coords, computeOption}) => new Promise((resolve, rej
   PubSub.subscribe('onTileLoad', (eventName, loadedTile) => {
     const tileKey = getTileKey(coords)
     const loadedTileKey = getTileKey(loadedTile.coords)
-    if(tileKey == loadedTileKey) {
+    if(tileKey === loadedTileKey) {
       return resolve(loadedTile.imageData)
     }
   })
@@ -34,7 +34,7 @@ export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, ma
   if(tile) return resolve(tile)
   PubSub.subscribe('onTileLoad', (eventName, loadedTile) => {
     const loadedTileKey = getTileKey(loadedTile.coords)
-    if(tileKey == loadedTileKey) {
+    if(tileKey === loadedTileKey) {
       tiles[loadedTileKey] = loadedTile.iterations
       return resolve(loadedTile.iterations)
     }

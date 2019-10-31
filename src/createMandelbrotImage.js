@@ -1,5 +1,4 @@
 import createColourScale from './createColourScale'
-import {cloneDeep, times, flatten} from 'lodash'
 import {tileSize, maxIterations} from './constants'
 import {getIterationsForTile} from './TileManager'
 

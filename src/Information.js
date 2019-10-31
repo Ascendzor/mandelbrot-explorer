@@ -3,9 +3,6 @@ import React, { Component } from 'react'
 import {FaInfo} from 'react-icons/fa'
 
 class Information extends Component {
-  constructor() {
-    super()
-  }
   render() {
     return <div className={'Information mapButton'} onClick={e => this.props.onClick()} style={{
       width: 60,
