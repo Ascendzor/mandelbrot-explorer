@@ -63,12 +63,6 @@ pub fn mandelbrot(xCoord: f64, mut yCoord: f64, mut zCoord: u32) -> Vec<u8> {
                     ((2.0 * zrzi.0 * zrzi.1) + imaginary)
                 );
                 iteration = iteration + 1;
-                if x == 150 && y == 150 && (iteration == 2 || iteration == 159) {
-                    log!("rust: iteration: ...");
-                    log!("rust: iteration: zrzi: {} {}", zrzi.0, zrzi.1);
-                    log!("rust: iteration: crci: {} {}", real, imaginary);
-                    log!("rust: iteration: iteration zCoord: {} {}", iteration, zCoord);
-                }
             }
 
             data.push((iteration / 4) as u8);

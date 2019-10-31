@@ -33,8 +33,6 @@ const work = async () => {
             //     yBounds.min
             // )
         } else {
-            console.log({colourScale})
-            
             imageData = rustyapi.mandelbrot(coords.x, coords.y, coords.z)
             imageData = new Uint8ClampedArray(imageData)
             imageData = new ImageData(imageData, 256, 256)
