@@ -1,16 +1,13 @@
 import {tileSize, maxIterations} from '../constants'
 
 export default (xCoord, yCoord, zCoord) => {
-    const imageData = new ImageData(tileSize, tileSize)
-    yCoord = -yCoord
-    zCoord = zCoord+1
+    const imageData = []
 
     const minXBounds = -((2)**zCoord)
     const maxXBounds = -minXBounds/2
 
     const minYBounds = minXBounds/2
     const maxYBounds = -minYBounds
-    // console.log('js: ' + [minXBounds, maxXBounds, minYBounds, maxYBounds].join(' '))
 
     for(let y=0; y<tileSize; y++) for(let x=0; x<tileSize; x++) {
         const preNormalizedPixel = xCoord + (x/tileSize)
@@ -20,7 +17,6 @@ export default (xCoord, yCoord, zCoord) => {
         const yrangePercentile = ((ypreNormalizedPixel-minYBounds) * 100) / (maxYBounds - minYBounds)
         const imaginary = (yrangePercentile * (1 - -1) / 100) + -1
         const real = (rangePercentile * (1 - -2) / 100) + -2
-        const pixel  = (((tileSize-1-y) * tileSize) + x)
 
         let iteration = 0
         let z = {x: real, y: imaginary}
@@ -34,10 +30,10 @@ export default (xCoord, yCoord, zCoord) => {
         }
         
 
-        imageData.data[pixel*4+0] = iteration / 4
-        imageData.data[pixel*4+1] = iteration / 2
-        imageData.data[pixel*4+2] = iteration
-        imageData.data[pixel*4+3] = 255
+        imageData.push(iteration / 4)
+        imageData.push(iteration / 2)
+        imageData.push(iteration)
+        imageData.push(255)
     }
 
     return imageData

@@ -28,11 +28,7 @@ macro_rules! log {
 #[wasm_bindgen]
 pub fn mandelbrot(xCoord: f64, mut yCoord: f64, mut zCoord: u32) -> Vec<u8> {
     let mut data = Vec::new();
-    // let tileSize: u16 = 256;
     let tileSize: u16 = 256;
-
-    yCoord = -yCoord;
-    zCoord = zCoord+1;
 
     let minXBounds: f64 = -((2 as i32).pow(zCoord)) as f64;
     let maxXBounds: f64 = -minXBounds/2.0;
@@ -50,8 +46,6 @@ pub fn mandelbrot(xCoord: f64, mut yCoord: f64, mut zCoord: u32) -> Vec<u8> {
             
             let imaginary: f64 = (yrangePercentile * (1.0 - -1.0) / 100.0) + -1.0;
             let real: f64 = (rangePercentile * (1.0 - -2.0) / 100.0) + -2.0;
-
-            let pixel: u16 = ((tileSize-1-y) * tileSize) + x;
 
             let mut zrzi = (real as f64, imaginary as f64);
             let mut iteration = 0;

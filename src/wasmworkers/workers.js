@@ -22,18 +22,11 @@ const work = async () => {
     rusty.then(rustyapi => {
         let imageData = null
         if(computeOption === 'js') {
-            imageData = mandelbrotreference.default(coords.x, coords.y, coords.z)
-            // iterations = mandelbrotreference.default(
-            //     coords.x,
-            //     coords.y,
-            //     maxIterations,
-            //     xBounds.max,
-            //     xBounds.min,
-            //     yBounds.max,
-            //     yBounds.min
-            // )
+            imageData = mandelbrotreference.default(coords.x, coords.y, coords.z+1)
+            imageData = new Uint8ClampedArray(imageData)
+            imageData = new ImageData(imageData, 256, 256)
         } else {
-            imageData = rustyapi.mandelbrot(coords.x, coords.y, coords.z)
+            imageData = rustyapi.mandelbrot(coords.x, coords.y, coords.z+1)
             imageData = new Uint8ClampedArray(imageData)
             imageData = new ImageData(imageData, 256, 256)
         }

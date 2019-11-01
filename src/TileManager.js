@@ -7,7 +7,6 @@ const getTileKey = coords => {
 const theWorkers = Array.from({length: 2}).map(a => new Worker('/workers.js'))
 theWorkers.forEach(worker => {
   worker.onmessage = evt => {
-    console.log('worker on message')
     PubSub.publish('onTileLoad', evt.data)
   }
 })
@@ -40,7 +39,6 @@ export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, ma
     }
   })
 
-  console.log({coords: tileCoords, xBounds, yBounds, tileSize, maxIterations})
   theWorkers[workerPointer].postMessage({coords: tileCoords, xBounds, yBounds, tileSize, maxIterations})
   workerPointer = (workerPointer+1) % theWorkers.length
 })
