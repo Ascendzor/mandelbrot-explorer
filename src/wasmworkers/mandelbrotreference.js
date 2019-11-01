@@ -1,5 +1,9 @@
 import {tileSize, maxIterations} from '../constants'
 
+const redColourScale = Array.from({length: 4096}).map((_, i) => i % 256)
+const greenColourScale = Array.from({length: 4096}).map((_, i) => (i+85) % 256)
+const blueColourScale = Array.from({length: 4096}).map((_, i) => (i+(85*2)) % 256)
+
 export default (xCoord, yCoord, zCoord) => {
     const imageData = []
 
@@ -28,12 +32,18 @@ export default (xCoord, yCoord, zCoord) => {
             }
             iteration++
         }
-        
 
-        imageData.push(iteration / 4)
-        imageData.push(iteration / 2)
-        imageData.push(iteration)
-        imageData.push(255)
+        if(iteration === maxIterations*zCoord) {
+            imageData.push(0)
+            imageData.push(0)
+            imageData.push(0)
+            imageData.push(255)
+        } else {
+            imageData.push(redColourScale[iteration])
+            imageData.push(greenColourScale[iteration])
+            imageData.push(blueColourScale[iteration])
+            imageData.push(255)
+        }
     }
 
     return imageData

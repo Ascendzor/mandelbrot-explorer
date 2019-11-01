@@ -26,19 +26,3 @@ export const renderTile = ({coords, computeOption}) => new Promise((resolve, rej
   theWorkers[workerPointer].postMessage({coords, computeOption})
   workerPointer = (workerPointer+1) % theWorkers.length
 })
-
-export const getIterationsForTile = ({tileCoords, xBounds, yBounds, tileSize, maxIterations}) => new Promise((resolve, reject) => {
-  const tileKey = getTileKey(tileCoords)
-  const tile = tiles[tileKey]
-  if(tile) return resolve(tile)
-  PubSub.subscribe('onTileLoad', (eventName, loadedTile) => {
-    const loadedTileKey = getTileKey(loadedTile.coords)
-    if(tileKey === loadedTileKey) {
-      tiles[loadedTileKey] = loadedTile.iterations
-      return resolve(loadedTile.iterations)
-    }
-  })
-
-  theWorkers[workerPointer].postMessage({coords: tileCoords, xBounds, yBounds, tileSize, maxIterations})
-  workerPointer = (workerPointer+1) % theWorkers.length
-})

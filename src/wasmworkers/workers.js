@@ -1,15 +1,6 @@
 const rusty = import("./rust/pkg/mandelbrot.js")
 const mandelbrotreference = require('./mandelbrotreference')
 
-const colourScale = Array.from({length: 4096}).map((_, i) => {
-    return {
-        r: i % 256,
-        g: (i+85) % 256,
-        b: (i+(85*2)) % 256,
-        a: 255
-    }
-})
-
 let taskQueue = []
 onmessage = message => new Promise((resolve, reject) => {
     taskQueue.push(message.data)
