@@ -59,7 +59,7 @@ export default () => {
                         computeOption: 'js'
                     }))
                 }).then(imageData => {
-                    if(imageData == rustData) console.log('they matched')
+                    
                 })
             })()
         }, 1000)

@@ -13,10 +13,12 @@ const work = async () => {
     rusty.then(rustyapi => {
         let imageData = null
         if(computeOption === 'js') {
+            console.log(`Rendering {${[coords.x, coords.y, coords.z].join(' ')}} tile with js`)
             imageData = mandelbrotreference.default(coords.x, coords.y, coords.z+1)
             imageData = new Uint8ClampedArray(imageData)
             imageData = new ImageData(imageData, 256, 256)
         } else if (computeOption === 'rust') {
+            console.log(`Rendering {${[coords.x, coords.y, coords.z].join(' ')}} tile with rust`)
             imageData = rustyapi.mandelbrot(coords.x, coords.y, coords.z+1)
             imageData = new Uint8ClampedArray(imageData)
             imageData = new ImageData(imageData, 256, 256)
