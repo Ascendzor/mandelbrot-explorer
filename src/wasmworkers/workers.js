@@ -16,10 +16,12 @@ const work = async () => {
             imageData = mandelbrotreference.default(coords.x, coords.y, coords.z+1)
             imageData = new Uint8ClampedArray(imageData)
             imageData = new ImageData(imageData, 256, 256)
-        } else {
+        } else if (computeOption === 'rust') {
             imageData = rustyapi.mandelbrot(coords.x, coords.y, coords.z+1)
             imageData = new Uint8ClampedArray(imageData)
             imageData = new ImageData(imageData, 256, 256)
+        } else {
+            console.log('Please pass a compute option such as "js" or "rust"')
         }
         postMessage({
             coords,

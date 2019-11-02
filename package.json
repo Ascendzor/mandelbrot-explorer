@@ -32,7 +32,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "build-rust && react-app-rewired build",
-    "build-rust": "wasm-pack build src/wasmworkers/rust && webpack-cli --config workerpack.config.js",
+    "build-worker": "yarn build-rust && webpack --config workerpack.config.js",
+    "build-rust": "wasm-pack build src/wasmworkers/rust",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "deploy": "yarn run build && gh-pages -d build"
