@@ -7,11 +7,11 @@ L.MandelbrotLayer = L.GridLayer.extend({
   createTile: (coords, done) => {
     const tile = document.createElement('canvas')
     tile.width = tile.height = tileSize
-    const context = tile.getContext('2d')
 
     // if(coords.x !== 0 || coords.y !== 0) return tile
+    // renderTile({coords, computeOption: (coords.x % 2 === 0) ? 'rust' : 'js'}).then(imageData => {
     renderTile({coords, computeOption: 'rust'}).then(imageData => {
-      context.putImageData(imageData, 0, 0)
+      tile.getContext('2d').putImageData(imageData, 0, 0)
       done(null, tile)
     })
     return tile
