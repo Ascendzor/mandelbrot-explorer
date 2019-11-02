@@ -4,7 +4,7 @@ const getTileKey = coords => {
   return [coords.x, coords.y, coords.z].join(' ')
 }
 
-const theWorkers = Array.from({length: 2}).map(a => new Worker('/workers.js'))
+const theWorkers = Array.from({length: 4}).map(a => new Worker('/workers.js'))
 theWorkers.forEach(worker => {
   worker.onmessage = evt => {
     PubSub.publish('onTileLoad', evt.data)
