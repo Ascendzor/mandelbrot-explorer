@@ -4,7 +4,12 @@ const getTileKey = coords => {
   return [coords.x, coords.y, coords.z].join(' ')
 }
 
-const theWorkers = Array.from({length: 4}).map(a => new Worker('/workers.js'))
+const theWorkers = Array.from({length: 4}).map(a => {
+  if(process.env.NODE_ENV === 'development') return new Worker('/workers.js')
+
+  //github pages, https://ascendzor.github.io/mandelbrot-explorer/
+  return new Worker('/mandelbrot-explorer/workers.js')
+})
 theWorkers.forEach(worker => {
   worker.onmessage = evt => {
     PubSub.publish('onTileLoad', evt.data)
