@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Mandelbrot from './Mandelbrot'
+import TheMap from './TheMap'
 import Benchmark from './Benchmark'
 
 export default () => {
@@ -14,6 +14,6 @@ export default () => {
   }
 
   return <div className="App">
-    <Mandelbrot />
+    <TheMap />
   </div>
 };
