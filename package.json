@@ -1,0 +1,21 @@
+{
+  "name": "mandelbrot",
+  "collaborators": [
+    "Your Name <you@example.com>"
+  ],
+  "description": "A sample project with wasm-pack",
+  "version": "0.1.0",
+  "license": "MIT/Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ascendzor/rust-wasm-mandelbrot"
+  },
+  "files": [
+    "mandelbrot_bg.wasm",
+    "mandelbrot.js",
+    "mandelbrot.d.ts"
+  ],
+  "module": "mandelbrot.js",
+  "types": "mandelbrot.d.ts",
+  "sideEffects": "false"
+}
