@@ -37,7 +37,7 @@ pub fn mandelbrot(xCoord: f64, mut yCoord: f64, mut zCoord: u32) -> Vec<u8> {
         blueColourScale.push(((i+(85*2)) % 256) as u8);
     }
 
-    let minXBounds: f64 = -((2 as i32).pow(zCoord)) as f64;
+    let minXBounds: f64 = -((2 as i64).pow(zCoord)) as f64;
     let maxXBounds: f64 = -minXBounds/2.0;
     let minYBounds: f64 = minXBounds/2.0;
     let maxYBounds: f64 = -minYBounds;

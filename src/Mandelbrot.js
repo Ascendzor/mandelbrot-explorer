@@ -19,10 +19,6 @@ const bounds = [
   [boundsSize*3.5, boundsSize*2]
 ]
 
-// const bounds = [
-//   [10, 10], [10, 10]
-// ]
-
 class Mandelbrot extends Component {
   constructor() {
     super()
