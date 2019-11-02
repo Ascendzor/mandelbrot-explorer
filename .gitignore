@@ -20,6 +20,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-src/rust/target
+src/wasmworkers/rust/target
 **/*.rs.bk
 Cargo.lock
