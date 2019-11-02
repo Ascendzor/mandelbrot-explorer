@@ -78,6 +78,7 @@ export default () => {
     }, [])
 
     return <div>
-        benchmark
+        <div>- Benchmark -</div>
+        <div>To be developed, for now, check the console</div>
     </div>
 }

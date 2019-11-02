@@ -4,11 +4,9 @@ import TheMap from './TheMap'
 import Benchmark from './Benchmark'
 
 export default () => {
-  if(window.location.pathname === '/benchmark') {
+  const hashPath = window.location.hash.split('#')[1]
+  if(hashPath === 'benchmark') {
     return <div className="App">
-      <div>
-        Do the benchmark here
-      </div>
       <Benchmark />
     </div>
   }
