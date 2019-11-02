@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "341ae61448dd5e3707d895f6b60d97eb",
+    "revision": "3bf35ea99c7d14f1cb9d04713a636fc4",
     "url": "/mandelbrot-explorer/index.html"
   },
   {
-    "revision": "e7cb65326f94edc3e294",
+    "revision": "4d7ee494601373a2a8a7",
     "url": "/mandelbrot-explorer/static/css/main.168d03ab.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/mandelbrot-explorer/static/js/2.82b3c551.chunk.js"
   },
   {
-    "revision": "e7cb65326f94edc3e294",
-    "url": "/mandelbrot-explorer/static/js/main.a0ae6fea.chunk.js"
+    "revision": "4d7ee494601373a2a8a7",
+    "url": "/mandelbrot-explorer/static/js/main.3801243e.chunk.js"
   },
   {
     "revision": "adb8101a88bfe56b6ebf",
